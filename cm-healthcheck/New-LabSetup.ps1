@@ -6,6 +6,7 @@
 	Demo lab setup script for Azure Automation
 .NOTES
 	1.0.0.0 - 12/29/2021 - David Stein
+	https://github.com/skatterbrainz/mms-moa-2022/cm-healthcheck
 #>
 [CmdletBinding()]
 param()
