@@ -9,6 +9,9 @@ TBD
 ## Setup
 
 * Azure Subscription (pay-as-you-go or higher)
+* Recommended
+  * ConfigMgr in a lab environment (not production!)
+  * ConfigMgr site server has Internet connectivity
 
 ### Azure Setup
 
