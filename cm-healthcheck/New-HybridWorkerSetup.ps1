@@ -2,7 +2,8 @@
 .SYNOPSIS
 	Install and configure Azure Automation Hybrid Worker
 .DESCRIPTION
-	Same as above :)
+	Same as above :) This script should be run AFTER the New-LabSetup.ps1 script has been
+	completed successfully.
 .PARAMETER GroupName
 	Name of new hybrid worker group
 .PARAMETER ResourceGroupName
