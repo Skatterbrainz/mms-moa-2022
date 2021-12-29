@@ -30,19 +30,19 @@ try {
 	$params = @{
 		Name = $ResourceGroupName
 		Location = $Location
-		Tag = $TagSet
 	}
 
 	if (-not (Get-AzResourceGroup @params -ErrorAction SilentlyContinue)) {
 		Write-Host "creating resource group: $($params.Name)" -ForegroundColor Cyan
+		$params.Add("Tag", $TagSet)
 		New-AzResourceGroup @params
 	} else {
 		Write-Host "resource group exists: $($params.Name)" -ForegroundColor Green
 		if ($ResetDemoEnvironment -eq $True) {
 			Write-Warning "removing entire demo lab!"
-			Get-AzResourceGroup @params | Remove-AzResourceGroup -Force 
+			Get-AzResourceGroup -Name $ResourceGroupName | Remove-AzResourceGroup -Force 
 			Write-Host "allow time for resources to be removed before running setup again" -ForegroundColor Yellow
-			break
+			return "completed"
 		}
 	}
 
