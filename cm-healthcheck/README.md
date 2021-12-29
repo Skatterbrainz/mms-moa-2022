@@ -12,6 +12,7 @@ TBD
 * Recommended
   * ConfigMgr in a lab environment (not production!)
   * ConfigMgr site server has Internet connectivity
+  * ConfigMgr site server has cmhealth PowerShell module installed
 
 ### Azure Setup
 
