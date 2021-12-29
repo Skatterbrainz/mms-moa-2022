@@ -13,12 +13,13 @@
 .PARAMETER DBName
 	Database name for ConfigMgr site
 .NOTES
-	1.0.0.0 - 12/29/2021 - David Stein
+	1.0.0.1 - 12/29/2021 - David Stein
 	https://github.com/skatterbrainz/mms-moa-2022/cm-healthcheck
 #>
 [CmdletBinding()]
 [OutputType()]
 param (
+	[parameter()][string]$Scope = "All",
 	[parameter()][string]$CMHost = "cm01.contoso.local",
 	[parameter()][string]$CMSiteCode = "P01",
 	[parameter()][string]$SQLHost = "cm01.contoso.local",
@@ -44,7 +45,7 @@ try {
 		SiteCode = $CMSiteCode
 		SqlInstance = $SQLHost
 		Database = $DBName
-		TestingScope = "Host"
+		TestingScope = $Scope
 		NoVersionCheck = $True
 	}
 

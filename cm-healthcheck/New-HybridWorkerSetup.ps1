@@ -21,8 +21,11 @@ param (
 	[parameter(Mandatory=$False)][string]$GroupName = "hw-cm-lab",
 	[parameter(Mandatory=$False)][string]$ResourceGroupName = "rg-cm-lab",
 	[parameter(Mandatory=$False)][string]$AutomationAccountName = "aa-cm-lab",
-	[parameter(Mandatory=$False)][string]$WorkspaceName = "ws-cm-lab"
+	[parameter(Mandatory=$False)][string]$WorkspaceName = "ws-cm-lab",
+	[parameter(Mandatory=$False)][switch]$Remove
 )
+
+$regkey = 'HKLM:\SOFTWARE\Microsoft\HybridRunbookWorker'
 
 try {
 	$azconn = Connect-AzAccount
@@ -53,14 +56,32 @@ try {
 		WorkspaceName         = $WorkspaceName
 	}
 	
-	#if (Get-AzAutomationHybridWorkerGroup -Name $GroupName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -ErrorAction SilentlyContinue) {
+	if ($Remove -eq $True) {
+		if (Get-Item -Path $RegKey -ErrorAction SilentlyContinue) {
+			Write-Verbose "Removing registry key: $RegKey"
+			Remove-Item -Path $RegKey -Recurse -Force | Out-Null
+		} else {
+			Write-Verbose "Registry key not found: $RegKey"
+		}
+		if (Get-Service HealthService -ErrorAction SilentlyContinue) {
+			try {
+				Write-Verbose "Restarting HealthService service"
+				Get-Service HealthService -ErrorAction Stop | Stop-Service -Force
+				Remove-Item -Path 'C:\Program Files\Microsoft Monitoring Agent\Agent\Health Service State' -Recurse
+				Start-Service -Name HealthService
+			}
+			catch {
+				$_
+			}
+		} else {
+			Write-Verbose "HealthService was not found"
+		}
+		Write-Host "Monitoring Agent service has been restarted. Rerun Add-HybridRunbookWorker cmdlet again"
+	} else {
 		Write-Host "Creating hybrid worker account" -ForegroundColor Cyan
 		New-OnPremiseHybridWorker.ps1 @params
-	#} else {
-	#	throw "Hybrid worker group not found. Make sure to run New-LabSetup.ps1 first"
-	#}
-	
-	Write-Host "Completed successfully!" -ForegroundColor Green
+		Write-Host "Completed successfully!" -ForegroundColor Green
+	}
 }
 catch {
 	Write-Error $_.Exception.Message
