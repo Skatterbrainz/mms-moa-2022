@@ -53,12 +53,12 @@ try {
 		WorkspaceName         = $WorkspaceName
 	}
 	
-	if (Get-AzAutomationHybridWorkerGroup -Name $GroupName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -ErrorAction SilentlyContinue) {
+	#if (Get-AzAutomationHybridWorkerGroup -Name $GroupName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -ErrorAction SilentlyContinue) {
 		Write-Host "Creating hybrid worker account" -ForegroundColor Cyan
 		New-OnPremiseHybridWorker.ps1 @params
-	} else {
-		throw "Hybrid worker group not found. Make sure to run New-LabSetup.ps1 first"
-	}
+	#} else {
+	#	throw "Hybrid worker group not found. Make sure to run New-LabSetup.ps1 first"
+	#}
 	
 	Write-Host "Completed successfully!" -ForegroundColor Green
 }

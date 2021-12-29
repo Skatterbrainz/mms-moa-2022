@@ -17,6 +17,7 @@
 	https://github.com/skatterbrainz/mms-moa-2022/cm-healthcheck
 #>
 [CmdletBinding()]
+[OutputType()]
 param (
 	[parameter()][string]$CMHost = "cm01.contoso.local",
 	[parameter()][string]$CMSiteCode = "P01",

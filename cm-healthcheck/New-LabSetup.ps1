@@ -9,6 +9,7 @@
 	https://github.com/skatterbrainz/mms-moa-2022/cm-healthcheck
 #>
 [CmdletBinding()]
+[OutputType()]
 param (
 	[parameter(Mandatory=$False)][string]$ResourceGroupName = "rg-cm-lab",
 	[parameter(Mandatory=$False)][string]$AutomationAccountName = "aa-cm-lab",
@@ -33,11 +34,11 @@ try {
 	}
 
 	if (-not (Get-AzResourceGroup @params -ErrorAction SilentlyContinue)) {
-		Write-Host "creating resource group: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating resource group: $($params.Name)"
 		$params.Add("Tag", $TagSet)
 		New-AzResourceGroup @params
 	} else {
-		Write-Host "resource group exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "resource group exists: $($params.Name)"
 		if ($ResetDemoEnvironment -eq $True) {
 			Write-Warning "removing entire demo lab!"
 			Get-AzResourceGroup -Name $ResourceGroupName | Remove-AzResourceGroup -Force 
@@ -57,10 +58,10 @@ try {
 	}
 
 	if (-not (Get-AzAutomationAccount -Name $params.Name -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue)) {
-		Write-host "creating automation account: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating automation account: $($params.Name)"
 		New-AzAutomationAccount @params
 	} else {
-		Write-host "automation account exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "automation account exists: $($params.Name)"
 	}
 
 	# Create Log Analytics Workspace
@@ -81,10 +82,10 @@ try {
 	}
 
 	if (-not (Get-AzOperationalInsightsWorkspace -Name $params.Name -ResourceGroupName $params.ResourceGroupName -ErrorAction SilentlyContinue)) {
-		Write-host "creating workspace: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating workspace: $($params.Name)"
 		New-AzOperationalInsightsWorkspace @params
 	} else {
-		Write-host "workspace exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "workspace exists: $($params.Name)"
 	}
 
 	# Create Automation Account Variables
@@ -98,10 +99,10 @@ try {
 	}
 
 	if (-not (Get-AzAutomationVariable -Name $params.Name -ResourceGroupName $params.ResourceGroupName -AutomationAccountName $params.AutomationAccountName -ErrorAction SilentlyContinue)) {
-		Write-host "creating variable: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating variable: $($params.Name)" 
 		New-AzAutomationVariable @params
 	} else {
-		Write-Host "variable exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "variable exists: $($params.Name)" 
 	}
 
 	$params = @{
@@ -113,10 +114,10 @@ try {
 	}
 
 	if (-not (Get-AzAutomationVariable -Name $params.Name -ResourceGroupName $params.ResourceGroupName -AutomationAccountName $params.AutomationAccountName -ErrorAction SilentlyContinue)) {
-		Write-host "creating variable: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating variable: $($params.Name)" 
 		New-AzAutomationVariable @params
 	} else {
-		Write-Host "variable exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "variable exists: $($params.Name)" 
 	}
 
 	$runbooks = ("Runbook-InvokeCmHealthCheck.ps1","Runbook-TestHybridWorker.ps1")
@@ -126,18 +127,19 @@ try {
 			ResourceGroup = $ResourceGroupName
 			AutomationAccountName = $AutomationAccountName
 			Type = "PowerShell"
-			Tags = $Tags
+			Tags = $TagSet
 			Published = $True
 		}
 		$runbookName = $(Get-Item $params.Path -ErrorAction Stop | Select-Object -ExpandProperty BaseName)	
 		if (-not (Get-AzAutomationRunbook -Name $runbookName -AutomationAccountName $AutomationAccountName -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue)) {
-			Write-host "importing runbook: $runbookName" -ForegroundColor Cyan
+			Write-Verbose "importing runbook: $runbookName" 
 			Import-AzAutomationRunbook @params
 		} else {
-			Write-Host "runbook exists: $runbookName" -ForegroundColor Green
+			Write-Verbose "runbook exists: $runbookName (import skipped)" 
 		}
 	}
-	
+
+	<#
 	$params = @{
 		Name = "hw-cm-lab"
 		ResourceGroupName = $ResourceGroupName
@@ -145,13 +147,13 @@ try {
 	}
 	
 	if (-not (Get-AzAutomationHybridWorkerGroup @params -ErrorAction SilentlyContinue)) {
-		Write-Host "creating hw group: $($params.Name)" -ForegroundColor Cyan
+		Write-Verbose "creating hw group: $($params.Name)" 
 		$hwg = New-AzAutomationHybridWorkerGroup @params
 		$hwg | select *
 	} else {
-		Write-Host "hw group exists: $($params.Name)" -ForegroundColor Green
+		Write-Verbose "hw group exists: $($params.Name)" 
 	}
-	
+	#>
 	Write-Host "Azure lab environment setup completed!" -ForegroundColor Green
 }
 catch {
