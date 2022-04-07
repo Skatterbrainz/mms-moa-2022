@@ -1,0 +1,16 @@
+// https://github.com/rod-trent/OnPremSecMonitoring4Sentinel/blob/main/KQL/RenderedDescriptionExampleKQL.txt
+// special thanks to Rod Trent and Cameron Fuller!
+
+AzureDiagnostics 
+| where Category == "JobStreams" and ResultDescription startswith "Computer"
+| sort by TimeGenerated
+| project TimeGenerated, ResultDescription
+| parse-where ResultDescription with * "Computer    :" Computer "\n" *
+| parse-where ResultDescription with * "Category    :" Category "\n" *
+| parse-where ResultDescription with * "TestGroup   :" TestGroup "\n" *
+| parse-where ResultDescription with * "TestName    :" TestName "\n" *
+| parse-where ResultDescription with * "Status      :" Status "\n" *
+| parse-where ResultDescription with * "Description :" Description "\n" *
+| parse-where ResultDescription with * "Message     :" Message "\n" *
+| parse-where ResultDescription with * "RunTime     :" RunTime "\n" *
+| project TimeGenerated,Computer,Category,TestGroup,TestName,Status,Message,Description,RunTime
