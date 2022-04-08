@@ -13,21 +13,22 @@
 .PARAMETER DBName
 	Database name for ConfigMgr site
 .NOTES
-	1.0.0.1 - 12/29/2021 - David Stein
+	1.0.0.4 - 2022-04-07 - David Stein
 	https://github.com/skatterbrainz/mms-moa-2022/cm-healthcheck
 #>
 [CmdletBinding()]
 [OutputType()]
 param (
-	[parameter()][string]$Scope = "All",
-	[parameter()][string]$CMHost = "cm01.contoso.local",
-	[parameter()][string]$CMSiteCode = "P01",
-	[parameter()][string]$SQLHost = "cm01.contoso.local",
-	[parameter()][string]$DBName = "CM_P01"
+	[parameter()][string]$Scope = "All"
 )
 
-$AutomationAccountName = "aa-cm-lab"
-$ResourceGroupName = "rg-cm-lab"
+#$AutomationAccountName = Set-AutomationVariable -Name 'AA-Name'
+#$ResourceGroupName     = Set-AutomationVariable -Name 'RG-Name'
+$CMHost     = Set-AutomationVariable -Name 'CM-HostName'
+$CMSiteCode = Set-AutomationVariable -Name 'CM-SiteCode'
+$SQLHost    = Set-AutomationVariable -Name 'CM-SQLInstance'
+$DBName     = Set-AutomationVariable -Name 'CM-Database'
+$Credential = Get-AutomationPSCredential -Name 'Automation-CMInstaller'
 
 try {
 	if (-not(Get-Module cmhealth -ListAvailable)) {
@@ -38,7 +39,6 @@ try {
 	}
 
 	Import-Module -Name cmhealth
-	$Credential = Get-AutomationPSCredential -Name 'On-Prem'
 
 	$params = @{
 		SiteServer = $CMHost
@@ -47,11 +47,12 @@ try {
 		Database = $DBName
 		TestingScope = $Scope
 		NoVersionCheck = $True
+		Credential = $Credential
 	}
 
 	$result = Test-CmHealth @params -ErrorAction Stop
 	$hcresult = ($result | Where-Object {$_.Status -in ('Error','Fail')} | Select-Object Category,TestName,Status | ConvertTo-Json -Compress)
-	$hcresult
+	#$hcresult
 
 	Set-AutomationVariable -Name 'LastHealthCheck' -Value "$(Get-Date -f 'yyyy-MM-dd hh:mm') EST"
 	Set-AutomationVariable -Name 'LastHealthResult' -Value $hcresult
@@ -60,6 +61,7 @@ try {
 		Status   = 'Success'
 		Message  = "completed"
 	}
+	$res = $result | Select-Object Computer,Category,TestGroup,TestName,Status,Description,Message,RunTime | ConvertTo-Json
 }
 catch {
 	$res = @{

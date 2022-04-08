@@ -3,6 +3,7 @@
 
 AzureDiagnostics 
 | where Category == "JobStreams" and ResultDescription startswith "Computer"
+| where ResultDescription contains "Status      : FAIL"
 | sort by TimeGenerated
 | project TimeGenerated, ResultDescription
 | parse-where ResultDescription with * "Computer    :" Computer "\n" *
