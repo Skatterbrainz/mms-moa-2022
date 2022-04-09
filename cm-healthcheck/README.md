@@ -2,24 +2,9 @@
 
 ## Title: Automate ConfigMgr Health Checks with Azure Automation
 
-## Overview
+## Demo Setup
 
-TBD
-
-## Setup
-
-* Azure Subscription (pay-as-you-go or higher)
-* Recommended
-  * ConfigMgr in a lab environment (not production!)
-  * ConfigMgr site server has Internet connectivity
-  * ConfigMgr site server has cmhealth PowerShell module installed
-
-### Azure Setup
-
-1. Copy *.ps1 files to a common location on local computer
-2. Open PowerShell console as Administrator
-3. Edit/Save New-LabSetup.ps1 to suit your environment
-4. Run script New-LabSetup.ps1
+Refer to the [ReadMe]() file in the Terraform sub-folder
 
 ### ConfigMgr Setup
 
