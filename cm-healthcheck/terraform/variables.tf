@@ -5,7 +5,7 @@ variable "environment" {
 
 variable "project" {
   type    = string
-  default = "cmhealth"
+  default = "cmhealth-mms"
 }
 
 variable "location" {
