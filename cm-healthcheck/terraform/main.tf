@@ -107,7 +107,7 @@ resource "azurerm_automation_schedule" "sch1" {
   frequency               = "Week"
   interval                = 1
   timezone                = "America/New_York"
-  start_time              = "2022-04-08T07:00:00-04:00"
+  start_time              = "2022-05-06T07:00:00-04:00"
   description             = "Runs every Friday at 7:00 AM EST"
   week_days               = ["Friday"]
 }
@@ -211,12 +211,16 @@ resource "azurerm_log_analytics_linked_service" "lnk1" {
   read_access_id      = azurerm_automation_account.aa.id
 }
 
+// ---------------------- Diagnostic Settings -----------------------------
+// https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting
+// and https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/diagnostic-settings?tabs=CMD
+
 resource "azurerm_monitor_diagnostic_setting" "diag1" {
   name               = "CM Health Checks"
   target_resource_id = azurerm_automation_account.aa.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.ws1.id
   log {
-    category = "JobStreams" # "AuditEvent"
+    category = "AllLogs" # "JobStreams" "JobLogs" "AuditEvent" "DscNodeStatus"
     enabled  = true
     retention_policy {
       enabled = false
@@ -231,7 +235,7 @@ resource "azurerm_monitor_diagnostic_setting" "diag1" {
 }
 
 resource "azurerm_log_analytics_saved_search" "laquery" {
-  name                       = "CM Health Check"
+  name                       = "CM Health Check Fails"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.ws1.id
   category     = "IT & Management Tools"
   display_name = "CM Health Check"

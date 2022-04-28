@@ -19,9 +19,9 @@
 [CmdletBinding()]
 param (
 	[parameter(Mandatory=$False)][string]$GroupName = "cm-lab",
-	[parameter(Mandatory=$False)][string]$ResourceGroupName = "cmhealth",
-	[parameter(Mandatory=$False)][string]$AutomationAccountName = "cmhealth",
-	[parameter(Mandatory=$False)][string]$WorkspaceName = "cmhealth",
+	[parameter(Mandatory=$False)][string]$ResourceGroupName = "mmsmoa2022",
+	[parameter(Mandatory=$False)][string]$AutomationAccountName = "mmsmoa2022",
+	[parameter(Mandatory=$False)][string]$WorkspaceName = "mmsmoa2022",
 	[parameter(Mandatory=$False)][switch]$Remove
 )
 

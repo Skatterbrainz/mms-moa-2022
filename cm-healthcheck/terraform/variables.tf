@@ -5,7 +5,7 @@ variable "environment" {
 
 variable "project" {
   type    = string
-  default = "cmhealth-mms"
+  default = "mmsmoa2022"
 }
 
 variable "location" {
@@ -15,7 +15,7 @@ variable "location" {
 
 variable "resgroup" {
   type    = string
-  default = "cmhealth"
+  default = "mmsmoa2022"
 }
 
 variable "creator" {

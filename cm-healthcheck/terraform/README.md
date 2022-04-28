@@ -9,6 +9,7 @@
 
 1. Download Windows setup from Hashicorp, or...
 2. Chocolatey: choco install terraform -y
+3. Install Azure CLI: choco install azurecli -y
 
 ## Execute Terraform
 
