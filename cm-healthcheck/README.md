@@ -4,7 +4,7 @@
 
 ## Demo Setup
 
-Refer to the [ReadMe]() file in the Terraform sub-folder
+Refer to the [ReadMe](https://github.com/Skatterbrainz/mms-moa-2022/blob/main/cm-healthcheck/terraform/README.md) file in the Terraform sub-folder
 
 ### ConfigMgr Setup
 
