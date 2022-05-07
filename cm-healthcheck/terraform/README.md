@@ -1,5 +1,14 @@
 # Terraform Lab Setup
 
+## Overview
+
+This folder contains a sample Terraform project to build an Azure 
+Resource Group with an Automation Account, a Log Analytics Workspace and more
+
+* Sample Runbooks, schedule, variables, credentials, etc.
+* Log Analytics Workspace and a sample query
+* Diagnostics configuration for the Automation Account link to the Log Analytics Workspace
+
 ## Edit terraform project files
 
   * main.tf (change the "job schedule" and "credential" parameters as desired)

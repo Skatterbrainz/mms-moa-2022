@@ -1,5 +1,10 @@
 @echo off
 cls
+:: ================================================================================
+:: This script is intended for demo purposes only. There are pauses throughout
+:: to allow stepping through during a presentation (which we didn't have time to do)
+:: Refer to the README.md file for information about setting up Terraform to use this.
+:: ================================================================================
 cd c:\git\mms-moa-2022\cm-healthcheck\terraform
 echo Edit the main.tf schedule date as needed...
 pause
