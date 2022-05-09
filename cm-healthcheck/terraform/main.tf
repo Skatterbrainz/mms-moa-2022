@@ -1,3 +1,5 @@
+// SET DEFAULT VALUES IN variables.tf FILE
+
 terraform {
   required_providers {
     azurerm = {
@@ -46,7 +48,7 @@ resource "azurerm_automation_credential" "ac" {
   resource_group_name     = azurerm_resource_group.rg.name
   automation_account_name = azurerm_automation_account.aa.name
   username                = "contoso\\cm-install"
-  password                = "Xx09340934$$"
+  password                = "P@$$w0rD!!456"
   description             = "On-prem service account"
 }
 
@@ -99,7 +101,7 @@ resource "azurerm_automation_runbook" "rb2" {
 
 // ------------------------ Job Schedule -------------------------
 // https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_schedule
-
+// EDIT THIS TO SET THE INITIAL START_TIME TO AT LEAST 15 MINUTES IN THE FUTURE
 resource "azurerm_automation_schedule" "sch1" {
   name                    = "fridays-7am-et"
   resource_group_name     = azurerm_resource_group.rg.name
